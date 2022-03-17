@@ -1,0 +1,8 @@
+neuron:
+  restart: always
+  image: localhost:5000/checkin-everything
+  command: /application/checkin-everything -logtostderr -v=4
+  environment:
+    DATA_FOLDER: /data
+  ports:
+    - 7474:8000
