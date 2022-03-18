@@ -15,7 +15,7 @@ var (
 
 func Start() {
 	for _, smzdmCookie := range SmzdmCookies {
-		TheMaster.Add(newSmzdm(smzdmCookie))
+		TheMaster.Add(newSmzdm(smzdmCookie["name"], smzdmCookie["cookie"]))
 	}
 	TheMaster.Start()
 }
@@ -48,7 +48,7 @@ func (m *master) Load() {
 	}
 
 	for _, cookie := range gjson.Get(string(data), "data.smzdm").Array() {
-		m.Add(newSmzdm(cookie.String()))
+		m.Add(newSmzdm(gjson.Get(cookie.String(), "name").String(), gjson.Get(cookie.String(), "cookie").String()))
 	}
 }
 
@@ -63,7 +63,9 @@ func (m *master) process() {
 		select {
 		case <-ticker.C:
 			for _, svc := range m.svcs {
-				go svc.Checkin()
+				go func(svc checkinSvc) {
+					svc.Checkin()
+				}(svc)
 			}
 		}
 	}
