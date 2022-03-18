@@ -14,9 +14,9 @@ var (
 )
 
 func Start() {
-	for _, smzdmCookie := range SmzdmCookies {
-		TheMaster.Add(newSmzdm(smzdmCookie["name"], smzdmCookie["cookie"]))
-	}
+	//for _, smzdmCookie := range SmzdmCookies {
+	//	TheMaster.Add(newSmzdm(smzdmCookie["name"], smzdmCookie["cookie"]))
+	//}
 	TheMaster.Start()
 }
 
