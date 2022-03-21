@@ -59,14 +59,26 @@ func (m *master) Start() {
 
 func (m *master) process() {
 	ticker := time.NewTimer(6 * time.Hour)
+	startChan := make(chan time.Time, 1)
+	go func() {
+		time.Sleep(30 * time.Second)
+		startChan <- time.Now()
+	}()
+
+	doFunc := func() {
+		for _, svc := range m.svcs {
+			go func(svc checkinSvc) {
+				svc.Checkin()
+			}(svc)
+		}
+	}
+
 	for {
 		select {
 		case <-ticker.C:
-			for _, svc := range m.svcs {
-				go func(svc checkinSvc) {
-					svc.Checkin()
-				}(svc)
-			}
+			doFunc()
+		case <-startChan:
+			doFunc()
 		}
 	}
 }

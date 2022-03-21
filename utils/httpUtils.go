@@ -72,10 +72,12 @@ func SendRequestCustom(method string, uri string, body *bytes.Buffer, customRequ
 		glog.Warningf("client.Do() failed with '%s'\n", err)
 		return http.StatusBadRequest, "", err
 	}
-	glog.V(6).Info(resp.StatusCode)
 
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 	responseBody = string(bodyBytes)
+
+	glog.V(6).Info(resp.StatusCode)
+	glog.V(6).Info(responseBody)
 
 	return resp.StatusCode, responseBody, nil
 }
