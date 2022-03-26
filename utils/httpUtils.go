@@ -77,7 +77,9 @@ func SendRequestCustom(method string, uri string, body *bytes.Buffer, customRequ
 	responseBody = string(bodyBytes)
 
 	glog.V(6).Info(resp.StatusCode)
-	glog.V(6).Info(responseBody)
+	//glog.V(6).Info("BODY: %s", responseBody)
+	//latin1, err := charmap.ISO8859_1.NewDecoder().Bytes(bodyBytes)
+	//glog.V(6).Infof("BODY: %s", latin1)
 
 	return resp.StatusCode, responseBody, nil
 }

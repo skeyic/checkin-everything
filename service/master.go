@@ -2,6 +2,7 @@ package service
 
 import (
 	"checkin-everything/config"
+	"github.com/golang/glog"
 	"github.com/tidwall/gjson"
 	"io/ioutil"
 	"sync"
@@ -48,7 +49,12 @@ func (m *master) Load() {
 	}
 
 	for _, cookie := range gjson.Get(string(data), "data.smzdm").Array() {
-		m.Add(newSmzdm(gjson.Get(cookie.String(), "name").String(), gjson.Get(cookie.String(), "cookie").String()))
+		var (
+			name   = gjson.Get(cookie.String(), "name").String()
+			cookie = gjson.Get(cookie.String(), "cookie").String()
+		)
+		m.Add(newSmzdm(name, cookie))
+		glog.V(4).Info("Add name: %s", name)
 	}
 }
 
@@ -65,7 +71,8 @@ func (m *master) process() {
 		startChan <- time.Now()
 	}()
 
-	doFunc := func() {
+	doFunc := func(a time.Time) {
+		glog.V(4).Info("Do Func at %s", a)
 		for _, svc := range m.svcs {
 			go func(svc checkinSvc) {
 				svc.Checkin()
@@ -75,10 +82,10 @@ func (m *master) process() {
 
 	for {
 		select {
-		case <-ticker.C:
-			doFunc()
-		case <-startChan:
-			doFunc()
+		case a := <-ticker.C:
+			doFunc(a)
+		case a := <-startChan:
+			doFunc(a)
 		}
 	}
 }
