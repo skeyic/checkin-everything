@@ -54,7 +54,7 @@ func (m *master) Load() {
 			cookie = gjson.Get(cookie.String(), "cookie").String()
 		)
 		m.Add(newSmzdm(name, cookie))
-		glog.V(4).Info("Add name: %s", name)
+		glog.V(4).Infof("Add name: %s", name)
 	}
 }
 
@@ -64,7 +64,7 @@ func (m *master) Start() {
 }
 
 func (m *master) process() {
-	ticker := time.NewTimer(6 * time.Hour)
+	ticker := time.NewTicker(12 * time.Hour)
 	startChan := make(chan time.Time, 1)
 	go func() {
 		time.Sleep(30 * time.Second)
@@ -72,7 +72,7 @@ func (m *master) process() {
 	}()
 
 	doFunc := func(a time.Time) {
-		glog.V(4).Info("Do Func at %s", a)
+		glog.V(4).Infof("Do Func at %s", a)
 		for _, svc := range m.svcs {
 			go func(svc checkinSvc) {
 				svc.Checkin()
