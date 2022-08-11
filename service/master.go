@@ -57,7 +57,7 @@ func (m *master) Load() {
 		glog.V(4).Infof("Add name: %s", name)
 	}
 
-	for _, cookie := range gjson.Get(string(data), "data.smzdm").Array() {
+	for _, cookie := range gjson.Get(string(data), "data.genshin").Array() {
 		var (
 			name   = gjson.Get(cookie.String(), "name").String()
 			cookie = gjson.Get(cookie.String(), "cookie").String()
