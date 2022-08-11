@@ -56,6 +56,15 @@ func (m *master) Load() {
 		m.Add(newSmzdm(name, cookie))
 		glog.V(4).Infof("Add name: %s", name)
 	}
+
+	for _, cookie := range gjson.Get(string(data), "data.smzdm").Array() {
+		var (
+			name   = gjson.Get(cookie.String(), "name").String()
+			cookie = gjson.Get(cookie.String(), "cookie").String()
+		)
+		m.Add(newGenshin(name, cookie))
+		glog.V(4).Infof("Add name: %s", name)
+	}
 }
 
 func (m *master) Start() {

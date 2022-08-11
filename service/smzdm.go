@@ -39,9 +39,9 @@ func (s *Smzdm) headers(req *http.Request) {
 func (s *Smzdm) Checkin() (err error) {
 	defer func() {
 		if err != nil {
-			utils.SendAlertV2("CheckIn Failed for "+s.name, "Error: "+err.Error())
+			utils.SendAlertV2("CheckIn SMZDM Failed for "+s.name, "Error: "+err.Error())
 		} else {
-			utils.SendAlertV2("CheckIn Successfully for "+s.name, "")
+			utils.SendAlertV2("CheckIn SMZDM Successfully for "+s.name, "")
 		}
 	}()
 	rCode, rBody, rErr := utils.SendRequestCustom(http.MethodPost, s.URL(), nil, s.headers)

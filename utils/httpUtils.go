@@ -58,7 +58,7 @@ func SendRequestCustom(method string, uri string, body *bytes.Buffer, customRequ
 	glog.V(6).Info(body.String())
 
 	if body == nil {
-		body = bytes.NewBuffer([]byte("{}"))
+		body = bytes.NewBufferString("{}")
 	}
 	req, err := http.NewRequest(method, uri, body)
 	if err != nil {
